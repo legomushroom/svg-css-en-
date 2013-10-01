@@ -6,8 +6,409 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
   </head>
   <body>
-    <h1>SVG+CSS icons</h1>
-    <script type="text/javascript" src="js/lib/jquery-2.0.1.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
+    <h1>SVG fitness or pushing icon fonts further</h1><img src="i/cover_vectorized.png">
+    <p>
+      	In this blog post we will build consistent,
+      modular and flexible vector icons system with both SVG and CSS.
+    </p>
+    <p>SVG icons demo:</p><p data-height="268" data-theme-id="0" data-slug-hash="hKxwo" data-user="sol0mka" data-default-tab="result" class='codepen'>See the Pen <a href='http://codepen.io/sol0mka/pen/hKxwo'>hKxwo</a> by Lego Mushroom (<a href='http://codepen.io/sol0mka'>@sol0mka</a>) on <a href='http://codepen.io'>CodePen</a></p>
+    <h2>	The problem</h2>
+    <p>
+      A lot of great methodologies and principles risen up making our CSS more and more modular,
+      structured and flexible. But think about your icons.
+      Using raster graphics for icons means that they are not manageable in CSS.
+      What if we need to easily change a color of icon in hover/active/focus state?
+      For each icon state we need to add one more icon image.
+      What about size? For each icon's size we need to add yet another icon size image.
+      What about shape? Yep the same thing. Not very comfy, right? So we end up with bloated sprite and style sheets that are hard to support and scale.
+    </p>
+    <p>The solution was found! Icon fonts. Yes, icon fonts are great.</p>
+    <ul> 
+      <h3>They are:</h3>
+      <li>Plain text, that means they could be gzipped up to 95% size</li>
+      <li>Vector, means "retina" ready</li>
+      <li>One place sourced(think about it like a sprite sheet), that means less http requests</li>
+      <li>Font. Yep, you can easily change size/colors/shape and add shadow</li>
+      <li>Browser supported down to IE6</li>
+    </ul>
+    <ul> 
+      <h3>Unfortunately, icon fonts have their own defects. Few reasons to push icon fonts further:</h3>
+      <li> <b>The Reason 1.</b>
+        <p>
+          Font is browser's "achilles' heel" for pixel perfect designs.
+          The first issue is - font icons are not crisp. 
+          The second one is - every browser renders fonts in it's own way so there is no hope to see consistent <a href="http://www.smashingmagazine.com/2012/04/24/a-closer-look-at-font-rendering/">result across them</a>. In addition to that, every operation system handles font rendering in it's <a href="http://www.joelonsoftware.com/items/2007/06/12.html">own </a><a href="http://en.wikipedia.org/wiki/Font_rasterization">fashion</a>. Take closer view at example below(clickable):<br><a href="i/example2.png"><img src="i/example2.png"></a>
+          <p>or</p><a href="i/example3.png"><img src="i/example3.png"></a>
+          <p>or inconsistent blurry icons across browsers:</p><a href="i/example1.png"><img src="i/example1.png"></a>
+          <p>
+            	This examples I've found on the internet in real life applications.
+            There is a lots of them out here. The last one was taken "as is" from popular icon font library.
+            I believe you have experienced what I'm talking about already. The way font icons could be unpredictably blurry is harmful.
+            The way they are inconsistently blurry harms the most. 
+            Wonder what designers think about it?<br><img src="i/unacceptable.png">
+          </p>
+        </p>
+      </li>
+      <li>	<b>The Reason 2. </b>
+        <p>
+          You can't have a multicolor icon.
+          Actually Apple is proposing multicolor fonts and adding an <a href="http://en.wikipedia.org/wiki/Apple_Color_Emoji">Apple Color Emojji</a> font to OSx Lion. But it might be a while before this becomes a reality.
+        </p>
+      </li>
+      <li>	<b>The Reason 3. </b>
+        <p>
+          Effects we can add to it are limited to text-shadow property.
+          There is no way to add, for instance, a nice inset shadow here.
+        </p>
+      </li>
+      <li> <b>The Reason 4. </b>
+        <p>
+          I've experienced problems with icon fonts.
+          Sometimes they were the reason of broken layout(!)
+          and sometimes of suddenly disappeared icons (it is a problem of ill-prepared font I believe).
+        </p>
+      </li>
+    </ul>
+    <h2>	The solution</h2><img src="i/solution.png">
+    <p>	Despite huge popularity of vector in browser, it's age and <a href="http://caniuse.com/svg">browsers' support</a> we have a lack of SVG flexible icons systems, I've got a chance to fill in that gap.
+      Contemporary, SVG looks like good old guy with super powers.
+      It's time to throw him off the sofa and send him to the gym.
+      Solution I will share here with you based on SVG graphics.
+      Expanding benefits of icon fonts, it will add a power of SVG filters for adding effects
+      and solve font rendering problems.
+      It can be multicolor, it has XML like structure and it is also much and much smaller in size compared to fonts.
+    </p>
+    <h2>	The bootstrap</h2>
+    <p>Bootstrap is a pure HTML document with linked main.css file - a place where we will write styles for our icons.</p>
+    <p>	Lets add a SVG document to a <i>&lt;body&gt; </i>tag. We will declare icons shapes here in <i>&lt;defs&gt; </i>section in way of <i>clipPath</i>. SVG filters for effects will be placed here too.
+      <pre><code>
+          &lt;!doctype html&gt;
+          &lt;html&gt;
+          	&lt;head&gt;
+          		&lt;meta charset=utf-8 /&gt;
+          		&lt;link rel="stylesheet" href="main.css"&gt;
+          	&lt;/head&gt;  
+          	&lt;body&gt;
+           
+           
+          		&lt;svg&gt;
+          			&lt;defs&gt;          
+          		 	&lt;!-- we will declare icons shapes and SVG filters for effects here --&gt; 
+          			&lt;/defs&gt;  
+          		&lt;/svg&gt;
+          	&lt;/body&gt;
+          &lt;/html&gt;</code></pre>
+    </p>
+    <p>Easy peasy. Pretty straightforward. You can download this bootstrap <a href="https://github.com/sol0mka/svg-css-bootstrap">here</a> or fork  <a href="http://codepen.io/sol0mka/pen/wBnsz">this pen</a> to follow my step by step instructions.</p>
+    <h2>Adding the first icon shape</h2>
+    <p>
+      So we need to get a shape of our first icon.
+      To achieve this we can use your favourite vector editor or just open SVG file
+      in text editor and take a code from it.
+      Lets add a &lt;clipPath&gt; tag and place icon's shape in it.
+      If you don't have a SVG file on hand, <a href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/6859/icon_1.svg">take mine</a>, please.
+      <pre><code>
+          &lt;!doctype html&gt;
+          &lt;html&gt;
+          	&lt;head&gt;
+          		&lt;meta charset=utf-8 /&gt;
+          		&lt;link rel="stylesheet" href="main.css"&gt;
+          	&lt;/head&gt;  
+          	&lt;body&gt;
+           
+          		&lt;svg&gt;
+          			&lt;defs&gt;   
+          				&lt;clipPath id=&quot;heart-path&quot;&gt;
+          					&lt;path fill-rule=&quot;evenodd&quot; clip-rule=&quot;evenodd&quot; d=&quot;M256,512c0,0-256-144.
+          						938-256-311.694C0,29.22,240.62,10.145,256,192 c18.467-181.721,256-162.784,256,8.306C512,367.062,256,512,256,512z&quot;/&gt;       
+          				&lt;/clipPath&gt;
+          			&lt;/defs&gt;  
+          		&lt;/svg&gt;
+          	&lt;/body&gt;
+          &lt;/html&gt;</code></pre>
+    </p>
+    <p>Pay attention to id="heart-icon" attribute on clipPath tag we will refer to icon's shape with it.</p>
+    <h2>Adding the first icon</h2>
+    <p>Lets add the first icon to our HTML. It consists of small SVG document with a rectangle in it:
+      <pre><code>
+          &lt;svg class=&quot;icon is-heart&quot; viewBox=&quot;0 0 512 512&quot;&gt;
+          	&lt;rect width=&quot;512&quot; height=&quot;512&quot; /&gt;
+          &lt;/svg&gt;</code></pre>
+    </p>
+    <p>
+      We are facing one of the drawbacks of this solution - an icon consist of two elements.
+      It is not a big deal for me because structure of all icons is the same so we can easily find/replace/remove it thru search on entire project.
+      If you use particles for managing your html assets, it is not a problem at all.
+      Pay attention at number 512. This is a size of icon's bounds when it was drawn in vector editor.
+      So you can have different numbers.
+      Class <i>.icon </i>is a base icon class, <i>.is-heart </i>is shape modifier class of our icon.
+    </p>
+    <p>Lets take a look at what we have got so far:</p><p data-height="268" data-theme-id="0" data-slug-hash="lIKzv" data-user="sol0mka" data-default-tab="result" class='codepen'>See the Pen <a href='http://codepen.io/sol0mka/pen/lIKzv'>lIKzv</a> by Lego Mushroom (<a href='http://codepen.io/sol0mka'>@sol0mka</a>) on <a href='http://codepen.io'>CodePen</a></p>
+    <p>Yep. Black square. Malevich <a href="http://wtfarthistory.com/post/8171511238/why-is-it-art">applauds</a>, but is not right time and place for suprematism manifesto, so lets move on.</p>
+    <h2>The last step: Adding CSS</h2>
+    <p>Lets focus on CSS. In <i>main.css </i>we will declare classes: <i>icon </i>and it's modifier <i>is-heart </i>class
+      <pre><code>
+          .icon{
+          	width:32px;
+          	height:32px;
+          	fill:#ccc;
+          }</code></pre>
+    </p>
+    <p>We've declared base icon size by standard width and height properties and color by fill property.
+      <pre><code>
+          icon.is-heart rect{
+          	clip-path:url('#heart-path');
+          }</code></pre>
+    </p>
+    <p>Finally! We have an icon shape.</p><p data-height="268" data-theme-id="0" data-slug-hash="zDrbn" data-user="sol0mka" data-default-tab="result" class='codepen'>See the Pen <a href='http://codepen.io/sol0mka/pen/zDrbn'>zDrbn</a> by Lego Mushroom (<a href='http://codepen.io/sol0mka'>@sol0mka</a>) on <a href='http://codepen.io'>CodePen</a></p>
+    <p> <i>clip-path </i>is that property which forces browser to take an icon shape accordingly to <i>#heart-path </i>reference and renders our rectangle but not those parts that are extending out of the shape. </p>
+    <quot>"The clipping path restricts the region to which paint can be applied." <a href="http://www.w3.org/TR/SVG/masking.html">W3С Recommendation</a>.</quot>
+    <p>The latest thing is to add different states for our icons:
+      <pre><code>
+          .icon:hover{
+            fill:#f5f5f5;
+            cursor:pointer;
+          }
+          .icon:active{
+            fill:#ccc;
+          }
+          .icon.is-check{
+            fill:#FE4365;
+          }</code></pre>
+    </p>
+    <p>That's it:</p><p data-height="268" data-theme-id="0" data-slug-hash="dtFni" data-user="sol0mka" data-default-tab="result" class='codepen'>See the Pen <a href='http://codepen.io/sol0mka/pen/dtFni'>dtFni</a> by Lego Mushroom (<a href='http://codepen.io/sol0mka'>@sol0mka</a>) on <a href='http://codepen.io'>CodePen</a></p>
+    <p>Sure it is simplified for the sake of clarity. In real world applications, you will add different colors and state colors thru different classes, but lets keep things simple for now.</p>
+    <p>To add one more icon we just need to:</p>
+    <ol>
+      <li>Declare it's clipPath in <i>&lt;defs&gt; </i>section of our main SVG inline document. </li>
+      <li>Add new icon class modifier.</li>
+    </ol>
+    <p>Example with more icons:</p><p data-height="268" data-theme-id="0" data-slug-hash="HCDBx" data-user="sol0mka" data-default-tab="result" class='codepen'>See the Pen <a href='http://codepen.io/sol0mka/pen/HCDBx'>HCDBx</a> by Lego Mushroom (<a href='http://codepen.io/sol0mka'>@sol0mka</a>) on <a href='http://codepen.io'>CodePen</a></p>
+    <p>Notice that we can have not only path element as our clip path shape, but any SVG shape or sequence of shapes.</p>
+    <h2>Adding effects</h2>
+    <p>
+      Let's add an inset shadow. For that we will use the power of SVG Filters.
+      For proper SVG filter effect we have to add one more element to our icon, so common icon will look like this:
+      <pre><code>
+          &lt;svg class=&quot;heart-icon icon&quot; viewBox=&quot;0 0 512 512&quot;&gt;
+            &lt;g&gt;      
+              &lt;rect width=&quot;512&quot; height=&quot;512&quot; /&gt;
+            &lt;/g&gt; 
+          &lt;/svg&gt;</code></pre>
+    </p>
+    <p>Tag &lt;g&gt; is that element for filter overlay.</p>
+    <p>And add a filter declaration to &lt;defs&gt; section in our SVG source:
+      <pre><code>&lt;filter id='inset-shadow'&gt;<br>	&lt;!-- Shadow offset --&gt;    
+          	&lt;feOffset      
+          		dx='0'     
+          		dy='0'    
+          	/&gt;<br>	&lt;!-- Shadow blur --&gt;
+            &lt;feGaussianBlur
+          		stdDeviation='20'
+          		result='offset-blur'
+          	/&gt;<br>	&lt;!-- Invert drop shadow to make an inset shadow--&gt;
+            &lt;feComposite
+          		operator='out'
+          		in='SourceGraphic'
+          		in2='offset-blur'
+          		result='inverse'
+          	/&gt;<br>	&lt;!-- color and transparency  --&gt;
+          	&lt;feFlood     
+          		flood-color='black'
+          		flood-opacity='.65'
+          		result='color'
+          	/&gt; <br>	&lt;!-- Cut color inside shadow --&gt;
+          	&lt;feComposite
+          		operator='in'
+          		in='color'
+          		in2='inverse'
+          		result='shadow'
+          		/&gt;        
+          	&lt;!-- Placing shadow over element --&gt;
+          	&lt;feComposite 
+          		operator='over' 
+          		in='shadow'
+          		in2='SourceGraphic'
+          	/&gt; 
+          &lt;/filter&gt;</code></pre>
+    </p>
+    <p>
+      SVG filters are really powerful stuff and overview of them is out of bounds of this blog post.
+      You can read the specification <a href="http://www.w3.org/TR/SVG/filters.html">here</a> and checkout a simple <a href="http://ie.microsoft.com/testdrive/graphics/hands-on-css3/hands-on_svg-filter-effects.htm">sandbox here</a>.
+      Filter declaration has an id='inset-shadow' for reference.
+      <pre><code>
+          .icon.is-inset-shadowg{
+          	filter:url('#inset-shadow')
+          }</code></pre>
+    </p>
+    <p>Take a look at icons with inset shadow filter:</p><p data-height="268" data-theme-id="0" data-slug-hash="awJcj" data-user="sol0mka" data-default-tab="result" class='codepen'>See the Pen <a href='http://codepen.io/sol0mka/pen/awJcj'>awJcj</a> by Lego Mushroom (<a href='http://codepen.io/sol0mka'>@sol0mka</a>) on <a href='http://codepen.io'>CodePen</a></p>
+    <p>That's it! I want to say, but it is not true.</p>
+    <h2>True or everybody must get a piece of pie.</h2>
+    <p>
+      Yes, lets talk about browsers' support.
+      If you will open any of those examples in old opera 11.6-15(before it moved to WebKit engine),
+      you will see a sequence of 3 rectangles.
+      Something like the one we saw at the beginning of this post.
+      Icons with filter overlay disappeared completely.
+      The reason they disappeared is that the browser didn't find 
+      a filter to use and rendered our icons transparent instead
+      of just not adding a filter. Weird behaviour I think. The 
+      same reason for rectangles - the shape reference was not found.
+    </p>
+    <p>
+      But what's going on? Why wasn't it found? 
+      The problem here is SVG reference source. 
+      Old Opera understands our reference path <i>url('#heart-path') </i>as path relative to CSS file, where we declared this style, 
+      or <i>url('main.css#heart-path') instead of relative to HTML </i>document <i>url('index.html#heart-path') </i>as other's do.
+      The same problems you can witness in Mozilla if you will 
+      move a CSS file out of folder with index.html.
+      Long story short. One way I've found to make old Opera and Firefox work nicely
+      is to make their reference to external SVG source like <i>url('icons.svg#heart-path')</i>. But WebKits and IE need an internal one
+      and do not understand such path.
+    </p>
+    <p>
+      Whew. Don't freak out.
+      The solution to solve this problem I will show you here is pretty straightforward 
+      but needs to use CSS preprocessor. If you not familiar with CSS preprocessors
+      you definitely should give them a try, it will worth your time investment. 
+      The most popular are <a href="http://lesscss.org/">{LESS}</a> <a href="http://sass-lang.com/">SASS</a> and <a href="http://learnboost.github.io/stylus/">Stylus</a>. Any of them will do here. I will use Stylus as a preprocessor,
+      which I believe will be the most illustrative here, but I will link
+      source codes with {LESS} and SASS as well.
+    </p>
+    <h2>Make it happen.</h2>
+    <p>
+      So we need one SVG source.
+      For that lets create an icons.svg file in our /css directory 
+      and move a declaration SVG document to it.
+    </p>
+    <p>The next step is to include that file in  <i>index.html </i>file.
+      There is a lot of ways to achieve this - we can use PHP/Jade or other
+      HTML preprocessor "include" directive, or make a JQuery "load" call.
+      With JQuery approach user will see rectangles while SVG file loads.
+      So lets stick with Jade.
+    </p>
+    <p><i>$('&lt;div&gt;').appendTo('body').load('css/icons.svg') will do the trick here if you want to try the JQuery way</i></p>
+    <p>In <i>index.jade </i>file, in place of SVG declarations document lets write an <i><b>include css/icons.svg </b></i>directive that includes our external <i>icons.svg </i>file to result index.html
+      <pre><code>
+          !!!
+          html
+          	head
+          		meta(charset="utf-8")
+          		title
+          		link(rel="stylesheet", href="css/main.css")
+          	body
+          		include css/icons.svg<br><br>		svg(viewBox="0 0 512 512").icon.is-heart: g
+          				rect(width="512", height="512")
+          		svg(viewBox="0 0 512 512").icon.is-heart.is-check: g
+          			rect(width="512", height="512")
+          		svg(viewBox="0 0 512 512").icon.is-play.is-inset-shadow: g
+          			rect(width="512", height="512")
+          		svg(viewBox="0 0 512 512").icon.is-pause.is-check: g
+          			rect(width="512", height="512")</code></pre>
+    </p><a href="https://github.com/sol0mka/svg-css-bootstrap2">Source code</a>
+    <p>The next step is to have one icon styles declaration source. It will be a <i>mixin</i>.<br>Lets create a file <i>icons-proto.styl </i>then add the contents of <i>main.css </i>file to it and adjust it to be a mixin:
+      <pre><code>
+          iconsMixin(path='')
+          	.icon          
+          	  width  32px          
+          	  height 32px          
+          	  cursor pointer          
+          	  fill   #ccc          <br><br>   .is-heart rect                 
+               clip-path url(path+'#heart-path')    
+             .is-play rect               
+               clip-path:url(path+'#play-path')    <br><br>	    &:hover               
+          		  fill: #999       
+          	    &:active, &.checked               
+          		  fill red         
+          	    g               
+          		  filter:url(path+'#inset-shadow')   </code></pre>
+    </p>
+    <p>
+      The mixin takes path to the SVG file as a parameter.
+      I didn't change icons' styles, just added nesting for convenience.
+      The latest step is to add webkits-ie.styl (for WebKits/IE) and old-opera-ff.styl (for old Opera/FF) files and run this mixin in them.        
+    </p>
+    <p><b><i>webkits-ie.styl:</i></b>
+      <pre><code>
+          @import 'icons-proto.styl'
+          iconsMixin()</code></pre>
+    </p>
+    <p><b><i>old-opera-ff.styl:</i></b>
+      <pre><code>
+          @import'icons-proto.styl'
+          icons_mixin('icons.svg') // path to the SVG file</code></pre>
+    </p>
+    <p>Everything that's left to do is to link webkits-ie.css as a default CSS file in the head section &lt;link rel="stylesheet" href="css/webkits-ie.css"&gt;.</p>
+    <p>And optional old-opera-ff.css for Firefox and old Opera file just before closing &lt;/body&gt; tag:
+      <pre><code>
+          &lt;script type=&quot;text/javascript&quot;&gt;
+          	var firefox = navigator.userAgent.indexOf(&quot;Firefox&quot;) != -1 ;
+          	var opera = navigator.userAgent.indexOf(&quot;Opera&quot;) != -1 ; 
+          	// if opera or firefox, link another file
+          	if ( firefox || opera ) {  
+          		document.write('&lt;link rel=&quot;stylesheet&quot; href=&quot;css/old-opera-ff.css&quot;&gt;');
+          	}
+          &lt;/script&gt;</code></pre>
+    </p>
+    <p>
+      And now, that's it!
+       <a href="https://github.com/sol0mka/svg-css-bootstrap3">Stylus</a> <a href="https://github.com/sol0mka/svg-css-bootstrap3/tree/less">{LESS}</a> <a href="https://github.com/sol0mka/svg-css-bootstrap3/tree/SASS">SASS</a>
+    </p>
+    <h2>Conclusion or What have we done?</h2><img src="i/conclusion.png">
+    <p>
+      	Lets look back with intention to analyse what have we done.
+      Although system may appear complex, it is DRY, flexible, consistent and simple.
+      We have one icon styles source and one SVG shapes source.
+    </p>
+    <ul>
+      <p><b>As a result we have got a system that:</b></p>
+      <li>
+        <p>is vector, so is "retina" ready</p>
+      </li>
+      <li>
+        <p>is easy color/size/effects CSS manageable </p>
+      </li>
+      <li>
+        <p>is lightweight(play icon from my example weights 84 bytes not gzipped)</p>
+      </li>
+      <li>
+        <p>is text so can be gzipped up to 95%</p>
+      </li>
+      <li>
+        <p>is one http request source</p>
+      </li>
+      <li>
+        <p>is crisp and consistent rendered across browsers</p>
+      </li>
+      <li>
+        <p>brings the power of SVG filters</p>
+      </li>
+      <li>
+        <p>supported by all major modern browsers</p>
+      </li>
+      <li>
+        <p>has XML like structure and can be multicolor</p>
+      </li>
+    </ul>
+    <p>Looking forward on your questions and feedback in comments, thank you!</p>
+    <ul>
+      <p><b>Browser support:</b></p>
+      <li>
+        <p>IE 9+</p>
+      </li>
+      <li>
+        <p>Mozilla 4+</p>
+      </li>
+      <li>
+        <p>Opera 11.6+</p>
+      </li>
+      <li>
+        <p>Safari 5.1+</p>
+      </li>
+      <li>
+        <p>Chrome 4+</p>
+      </li>
+    </ul>
   </body>
+  <script async src="http://codepen.io/assets/embed/ei.js"></script>
 </html>
